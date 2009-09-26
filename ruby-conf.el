@@ -53,14 +53,14 @@
 ;(set-face-background 'erb-face "grey18")
 ;(set-face-background 'erb-delim-face "grey18")
 
-(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+;(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
-(defun my-ruby-mode-hook ()
+(defun my-ruby-mode-hook () nil)
 ;  (ruby-electric-mode)
 ;  (hs-minor-mode)
 ;  (if (= emacs-major-version 22) (reveal-mode))
-  (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
-  (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
+;  (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
+;  (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
 
 
 (when (= emacs-major-version 22)
@@ -134,3 +134,12 @@ buffer."
 
 (define-key ruby-mode-map (kbd "C-c 4 t") 'toggle-buffer-other-window)
 (define-key ruby-mode-map (kbd "C-c t") 'toggle-buffer)
+
+(defun ruby-reindent-then-newline-and-indent ()
+  (interactive "*")
+  (newline)
+  (save-excursion
+    (end-of-line 0)
+    (indent-according-to-mode)
+    (delete-region (point) (progn (skip-chars-backward " \t") (point))))
+  (indent-according-to-mode))
