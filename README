@@ -1,0 +1,16 @@
+This is my emacs directory and setup config.  I've had it a long time
+and just recently went through and cleaned it up.  These days I'm
+pretty much only using emacs for ruby/html/css/js editing.  As such,
+there's some stuff in here (particularly ruby-config.el wrt
+compilation mode) that breaks for other stuff.
+
+I have ~/.emacs sym linked to ~/emacs.d/init.el and ~/.emacs.d
+symlinked to ~/emacs.d.  Maybe I don't need these symlinks, but it
+seems like I do.  Basically, my init.el has some global variables set,
+sets my load path to include all the subdirs and stuff, then starts
+loading the *-config.el files.  It's easy to turn off features this
+way by simply commenting them out of init.el to not load them.  Also,
+it keeps all my config wrt some feature set in one place to go look
+at.
+
+Email questions and such to Doug Alcorn <dougalcorn@gmail.com>
