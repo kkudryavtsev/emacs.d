@@ -4,3 +4,6 @@
 [submodule "site-lisp/jw-emacs-setup"]
 	path = site-lisp/jw-emacs-setup
 	url = git://github.com/jimweirich/emacs-setup.git
+[submodule "site-lisp/find-file-in-project"]
+	path = site-lisp/find-file-in-project
+	url = git@github.com:dougalcorn/find-file-in-project.git
