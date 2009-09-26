@@ -143,3 +143,10 @@ buffer."
     (indent-according-to-mode)
     (delete-region (point) (progn (skip-chars-backward " \t") (point))))
   (indent-according-to-mode))
+
+;; from an older ruby-mode that's no longer used?
+(defun ruby-insert-end ()
+  (interactive)
+  (insert "end")
+  (ruby-indent-line t)
+  (end-of-line))
