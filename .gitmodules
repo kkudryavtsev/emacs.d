@@ -1,3 +1,6 @@
 [submodule "site-lisp/magit"]
 	path = site-lisp/magit
 	url = http://gitorious.org/projects/magit/repos/mainline
+[submodule "site-lisp/jw-emacs-setup"]
+	path = site-lisp/jw-emacs-setup
+	url = git://github.com/jimweirich/emacs-setup.git
