@@ -1,0 +1,114 @@
+;;;; Emacs Bookmark Format Version 1 ;;;;
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("php-army"
+  ((filename . "~/devel/RosettaStone/php-army/")
+   (front-context-string . ".svn\n  drwxr-xr-")
+   (rear-context-string . "08 Jan 11 11:23 ")
+   (position . 265)))
+ ("bptjobs"
+  ((filename . "~/devel/bptjobs/")
+   (front-context-string . "CHANGELOG\n  -rw-")
+   (rear-context-string . "88 Oct 19 10:11 ")
+   (position . 251)))
+ ("bright2-crons"
+  ((filename . "/rsh:bright2:/home/ofsxfer/crons/")
+   (front-context-string . "126073_shpa.cron")
+   (rear-context-string . "16 Aug 13  2004 ")
+   (position . 222)))
+ ("promote"
+  ((filename . "/rsh:bright2:/usr/local/promote/")
+   (front-context-string . "alltel_cron.job\n")
+   (rear-context-string . "92 Mar 29  2005 ")
+   (position . 221)))
+ ("xferprof"
+  ((filename . "/rsh:bright2:/home/ofsxfer/etc/xferprof")
+   (front-context-string . "# $Id: xferprof,")
+   (rear-context-string)
+   (position . 1)))
+ ("storycards"
+  ((filename . "~/devel/storycards/")
+   (front-context-string . ".boring\n  -rw-r-")
+   (rear-context-string . "08  6 Oct 12:46 ")
+   (position . 247)))
+ ("bright2-ofsbin"
+  ((filename . "/rsh:bright2:/home/ofsxfer/bin/")
+   (front-context-string . ".fmtorder\n  -rw-")
+   (rear-context-string . "84 Aug 29  2003 ")
+   (position . 283)))
+ ("online_truckdown.ec"
+  ((filename . "/ftp:fus7314@u060win3:/home60/fus7314/zipps/src/share/online_truckdown.ec")
+   (front-context-string . "/***************")
+   (rear-context-string)
+   (position . 1)))
+ ("zipps"
+  ((filename . "/ftp:fus7314@u060win3:/home60/fus7314/zipps/src/")
+   (front-context-string . "crt\n  drwxrwsr-x")
+   (rear-context-string . "12 Jul 13 16:31 ")
+   (position . 245)))
+ ("photo-depot"
+  ((filename . "~/devel/photo-depot/")
+   (front-context-string . ".svn\n  -rw-r--r-")
+   (rear-context-string . "08  4 Jun 07:55 ")
+   (position . 251)))
+ ("rdt"
+  ((filename . "/ftp:fus7314@u060win3:/home60/fus7314/skyline/src/rdt/")
+   (front-context-string . "cntrdt_kr.c\n  -r")
+   (rear-context-string . "92 May 23 12:16 ")
+   (position . 1026)))
+ ("cntrdt_kr.c"
+  ((filename . "/ftp:fus7314@u060win3:/home60/fus7314/skyline/src/rdt/cntrdt_kr.c")
+   (front-context-string . "/***************")
+   (rear-context-string)
+   (position . 1)))
+ ("d-65 CS2 Workflow Summary.txt"
+  ((filename . "/Users/dalcorn/Documents/Camera/Workflow/d-65 CS2 Workflow Summary.txt")
+   (front-context-string . " setting to all ")
+   (rear-context-string . "y the global ACR")
+   (position . 941)))
+ ("skyline-rdt"
+  ((filename . "/ftp:fus7314@u060win3:/home/skyline/skyline/src/rdt/")
+   (front-context-string . "MSPLabelApplicat")
+   (rear-context-string . "99 Apr 05 11:05 ")
+   (position . 251)))
+ ("skyline"
+  ((filename . "/ftp:fus7314@u060win3:/home/skyline/skyline/")
+   (front-context-string . "  total 224\n  dr")
+   (rear-context-string . "kyline/skyline:\n")
+   (position . 48)))
+ ("fus7314@u060win3"
+  ((filename . "/ftp:fus7314@u060win3:/home60/fus7314/")
+   (front-context-string . "  total 312\n  dr")
+   (rear-context-string . "home60/fus7314:\n")
+   (position . 42)))
+ ("compatcon-cvs"
+  ((filename . "~/devel/compatcon-cvs/")
+   (front-context-string . "CHANGELOG\n  drwx")
+   (rear-context-string . "09 15 Mar 19:17 ")
+   (position . 254)))
+ ("trex"
+  ((filename . "/ftp:fus7314@devsco5:/home/fus7314/source/trex/")
+   (front-context-string . "released -> /hom")
+   (rear-context-string . "27 Dec 16 09:54 ")
+   (position . 528)))
+ ("pdx"
+  ((filename . "/ftp:fus7314@devsco5:/home/fus7314/source/pdx/")
+   (front-context-string . "  total 46\n  drw")
+   (rear-context-string . "314/source/pdx:\n")
+   (position . 50)))
+ ("multi-scooby-home"
+  ((filename . "/multi:ssh:dalcorn@home:ssh:dalcorn@lathi.net:/home/dalcorn/")
+   (front-context-string . ".bash_history\n  ")
+   (rear-context-string . "02 Sep 27 14:37 ")
+   (position . 256)))
+ ("lab008:zroot"
+  ((filename . "/telnet:root@lab008:/u/zadall/")
+   (front-context-string . "  /telnet:root@l")
+   (rear-context-string)
+   (position . 1)))
+ ("devsco5:~"
+  ((filename . "/telnet:fus7314@devsco5:/home/fus7314/")
+   (front-context-string . ".ksccsrc\n  -rw--")
+   (rear-context-string . "33 Aug  4 08:47 ")
+   (position . 226))))

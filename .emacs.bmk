@@ -1,0 +1,26 @@
+;;;; Emacs Bookmark Format Version 1 ;;;;
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("Syntax of Regexps"
+  ((filename . "/usr/share/info/xemacs21/lispref.info.gz")
+   (front-context-string . "File: lispref.in")
+   (rear-context-string)
+   (position . 31880)
+   (info-node . "Syntax of Regexps")))
+ ("blosxom"
+  ((filename . "/home/dalcorn/data/blosxom/")
+   (front-context-string . "  /home/dalcorn/")
+   (rear-context-string)
+   (position . 1)))
+ ("dataplay"
+  ((filename . "/home/dalcorn/devel/voyager-core/core-tools/dataplay/")
+   (front-context-string . ".#dfs.c.1.15\n  -")
+   (rear-context-string . "16 Jan 24 15:31 ")
+   (position . 188)))
+ ("lispref"
+  ((filename . "/usr/share/info/xemacs21/lispref.info.gz")
+   (front-context-string . "File: lispref.in")
+   (rear-context-string)
+   (position . 2369)
+   (info-node . "Top"))))

@@ -1,0 +1,6 @@
+;(require 'escreen)
+;(escreen-install)
+(load "elscreen" "ElScreen" t)
+(setq elscreen-prefix-key (kbd "C-\\"))
+(global-unset-key elscreen-prefix-key)
+(global-set-key elscreen-prefix-key elscreen-map)

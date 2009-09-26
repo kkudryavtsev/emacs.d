@@ -1,0 +1,160 @@
+ElScreen 1.3.2 README file
+
+This is the distribution of ElScreen 1.3.2, released August 2004. 
+It is an Emacs utility with which you can have multiple screens
+(window-configuration) on your GNU Emacs as well as GNU screen on 
+terminal.
+
+If you use emacs-lisp applications which have many windows (like
+Gnus, irchat, Wanderlust, Mew...), ElScreen makes it easy to
+switch to a different screen, with its configuration unchanged.
+You can also create and kill screen, jump to them, rename the
+screen, and so on.
+
+This version is developed on Emacs 21.3.50, with APEL 10.6.
+
+
+Files
+-----
+This package should contain the following files:
+
+    elscreen.el     ElScreen version 1.3.2 main file
+    README          Introduction to ElScreen 1.3.2 (this file)
+    ChangeLog       ElScreen ChangeLog file
+
+
+Installation
+------------
+To use ElScreen, APEL is required.  You will find it at
+
+  ftp://ftp.m17n.org/pub/mule/apel/
+
+Then, simply install elscreen.el file in this directory to your
+load-path, and put following line into your .emacs:
+
+    (load "elscreen" "ElScreen" t)
+
+
+Usage
+-----
+You may use following sequences on ElScreen:
+
+    C-z         ElScreen prefix key
+    C-z C-c     Create new screen
+    C-z k       Kill the current screen
+    C-z C-p     Switch to the previous screen
+    C-z C-n     Switch to the next screen
+    C-z C-a     Toggle screens
+    C-z g       Jump to the specified screen
+    C-z [0-9]   Jump to the screen #
+    C-z ?       Show help
+    C-z C-f     Find file in new screen
+    C-z w       Show list of screens
+    C-z m       Show last message
+    C-z t       Show time
+    C-z A       Name the current screen
+    C-z v       Show ElScreen version
+
+
+Setup
+-----
+You can set the following variables to configure ElScreen.  These
+can be set in .emacs file directly or "Options" in your menu bar.
+
+(defcustom elscreen-default-buffer-name "*scratch*"
+
+
+    elscreen-prefix-key
+    
+        ElScreen prefix-key.  The default value is `\C-z'.
+
+    elscreen-display-screen-number
+
+        If non nil, show the number of the current screen in mode
+        line. The default value is `t'.
+
+    elscreen-buffer-to-nickname-alist
+
+        The pairs of buffer-name and corresponding screen nickname,
+        which are listed by 'elscreen-display-screen-name-list'
+        only when major-mode cannot determine its screen nickname.
+	The default value is:
+
+          '(("^wl-" . "Wanderlust")
+            ("^mew-" . "Mew")
+            ("^irchat-" . "IRChat")
+            ("^liece-" . "Liece")
+            ("^dired-mode$" . "Dired")
+            ("^Info-mode$" . "Info")
+            ("^lookup-" . "Lookup"))
+
+    elscreen-mode-to-nickname-alist
+
+        The pairs of major-mode and corresponding screen nickname,
+        which are listed by 'elscreen-display-screen-name-list'.
+        The default value is:
+
+          '(("[Ss]hell" . "shell")
+            ("compilation" . "compile")
+            ("-telnet" . "telnet")
+            ("dict" . "OnlineDict")
+            ("*WL:Message*" . "Wanderlust"))
+
+    elscreen-display-tab (only for GNU Emacs 21)
+
+        If non nil, display screen tabs at the top of frame.  The
+        default value is `t'.
+
+    elscreen-tab-width (only for GNU Emacs 21)
+
+        Label width of each tab.  The default value is 16.
+
+    elscreen-tab-display-create-screen (only for GNU Emacs 21)
+
+        If non nil, display the tab (labeled with [!]) to create
+        screen at the most left side of the tab line.  The default
+        value is `t'.
+
+    elscreen-tab-display-kill-screen (only for GNU Emacs 21)
+
+        If non nil, display the icon ([X]) to kill corresponding
+        screen.  The default value is `t'.
+
+
+Where Can I Get ElScreen?
+-------------------------
+ElScreen is available from the following anonymous ftp site.
+
+       ftp://ftp.morishima.net/pub/morishima.net/naoto/ElScreen/
+
+
+Bugs
+----
+Under multiple-frame environment, screen numbers and tabs (only in
+GNU Emacs 21) displayed on mode line of each frame is changed at
+the same time.
+
+
+Bug Reports
+-----------
+ElScreen is maintained by Naoto Morishima.  Please mail bug reports
+and any comments to:
+
+       naoto@morishima.net
+
+
+Acknowledgment
+--------------
+Many people contributed to ElScreen by reporting problems or suggesting
+various improvements.  Here is a list of these people. 
+
+  Tohru Sugayama
+  Yoshinobu Takenaga
+  Masatoshi Takamura
+  Jin Kashimura
+  Takahiko Sakai
+  Norio Suzuki
+  Yoshitatsu Takeshita
+  Yoichi Nakayama
+  sen_ml@eccosys.com
+  Dan Debertin

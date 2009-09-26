@@ -1,0 +1,4 @@
+(("svn-trac-project-root" "https://svn.lan.flt/cgi-bin/trac-webdev.cgi/")
+ ("sort-status-buffer" t)
+ ("elide-list" nil)
+ ("module-name" nil))

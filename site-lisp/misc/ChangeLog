@@ -1,0 +1,184 @@
+2000-11-17  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-send-command-and-check): Send command and "echo
+	$?" as two separate commands.
+
+2000-11-15  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-handle-shell-command): Return exit status.
+
+	* tramp-vc.el (tramp-vc-do-command): Return exit status.
+	(tramp-vc-do-command-new): For the new VC that comes with Emacs
+	21.
+	(tramp-handle-vc-user-login-name): User part of a Tramp file name
+	structure might be empty.
+	(vc-user-login-name): Protect against `file' unbound.  (Assumes
+	local call in this case!)  Kudos to Hannu Koivisto for reporting
+	this.
+
+2000-11-09  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-methods): Change tramp-remote-sh to "/bin/sh"
+	from "" for the sudu and sudm methods.
+
+2000-11-01  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-dos-coding-system): New variable.
+	(tramp-open-connection-telnet, tramp-open-connection-rsh,
+	tramp-open-connection-su, tramp-open-connection-multi): Use it.
+	(tramp-coding-system-change-eol-conversion): New compat function.
+	(tramp-open-connection-setup-interactive-shell): Use it.
+
+2000-10-20  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-open-connection-telnet): Missed occurrences of
+	match-string. 
+	(tramp-open-connection-rsh): Dito.
+	(tramp-open-connection-su): Dito.
+	(tramp-multi-connect-telnet): Dito.
+	(tramp-multi-connect-rlogin): Dito.
+	(tramp-multi-connect-su): Dito.
+
+2000-10-20  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-open-connection-telnet): Don't bind
+	`coding-system-for-read' on Emacs 21.
+	(tramp-open-connection-rsh): Dito.
+	(tramp-open-connection-su): Dito.
+	(tramp-open-connection-multi): Dito.
+
+2000-10-20  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-wait-for-regexp): Return list of match-strings.
+	This way, communication with callers isn't done via global state.
+	(tramp-open-connection-telnet): Use it.
+	(tramp-open-connection-rsh): Dito.
+	(tramp-open-connection-su): Dito.
+	(tramp-multi-connect-telnet): Dito.
+	(tramp-multi-connect-rlogin): Dito.
+	(tramp-multi-connect-su): Dito.
+	(tramp-wait-for-output): From match data, compute list of
+	match-strings.  Used by tramp-wait-for-regexp.
+
+2000-10-06  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-handle-load): Tentative first implementation.
+
+2000-09-26  Henrik Holm  <henrik@ece.umn.edu>
+
+	* tramp.el (tramp-make-tramp-file-user-nil-format): New variable.
+	(tramp-open-connection-telnet): Work when USER is nil.
+	(tramp-open-connection-rsh): dito.
+	(tramp-open-connection-su): dito.
+	(tramp-multi-connect-telnet): dito.
+	(tramp-multi-connect-rlogin): dito.
+	(tramp-multi-connect-su): dito.
+	(tramp-make-rcp-program-file-name): dito.
+	(tramp-open-connection-multi): Don't grok default USER.
+	(tramp-pre-connection): Not changed.  tramp-current-user will be
+	set to nil when no user is given in the file name.
+	(tramp-dissect-multi-file-name): dito.
+	(tramp-dissect-file-name): Return nil when no user is given in
+	file name.
+
+2000-09-25  Henrik Holm  <henrik@ece.umn.edu>
+
+	* tramp.el: `An rcp file' --> `a tramp file', in various places.
+	(tramp-buffer-name): Correct typo.
+
+2000-09-17  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-file-exists-command): New Variable.
+	(tramp-handle-file-exists-p): Use it.
+	(tramp-find-file-exists-command): New function to initialize new
+	variable.
+	(tramp-post-connection): Use it.
+	(tramp-get-file-exists-command): Access variable.
+	(tramp-bug): Report a few more variable settings.
+
+2000-09-16  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-open-connection-setup-interactive-shell): Set
+	TERM=dumb as suggested by V. Balaji <vb@gfdl.gov>.
+
+2000-09-14  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-methods): Method `scpx' was missing a setting
+	for `tramp-remote-sh'.
+
+2000-09-09  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-handle-insert-directory): Try to improve the
+	logic as to what exactly is displayed.  The `/.' idea was snarfed
+	from the standard `insert-directory'.
+
+2000-09-01  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-file-name-structure): Move `-' to beginning of
+	[...].  Is this really necessary?  Well, it won't hurt.
+
+2000-08-31  Hilko Bengen  <bengen@vdst-ka.inka.de>
+
+	* tramp.el (tramp-file-name-structure): Allow `-' in user names.
+
+2000-08-29  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* Makefile (tramp.elc): Wrap long line.
+	(tramp-vc.elc): Frob load-path for byte-compilation because of
+	required libraries.
+
+	* tramp-vc.el: Move `provide' to end of file.
+	Require some needed libraries to avoid byte-compiler errors.
+
+	* tramp.el (tramp-handle-file-name-all-completions): Expand
+	DIRECTORY so that this also works with abbreviated file names.
+	(tramp-handle-file-newer-than-file-p): Bug with `signal'.
+	(tramp-handle-make-symbolic-link): Check that method, user, and
+	host are the same when making symlinks.
+	(tramp-bug): Report on more variables, change intro msg.
+
+2000-08-25  Yuji Yamano <yyamano@kt.rim.or.jp>
+
+	* tramp.el (tramp-perl-file-attributes): Use 0170000 as the right 
+	value of Bitwise And instead of 0120000 and 040000. It works fine
+	with block devices and sockets now.
+
+2000-08-25  Yuji Yamano <yyamano@kt.rim.or.jp>
+
+	* tramp.el (tramp-remote-path): Add "/usr/pkg/bin" to 
+	tramp-remote-path for NetBSD packages.
+
+2000-08-19  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-multi-connect-su): Defer (erase-buffer) until
+	after the buffer contents are used.
+
+2000-08-18  Paul D. Smith  <pausmith@nortelnetworks.com>
+
+	* tramp.el (tramp-pre-connection): Locally (to the connection
+	buffer) set inhibit-eol-conversion to nil.
+
+2000-08-18  KOIE Hidetaka  <hide@koie.org>
+
+	* tramp.el (tramp-handle-insert-file-contents): Don't use
+	`no-conversion' coding system on the local copy.
+
+2000-08-18  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.el (tramp-handle-file-exists-p): Use `test -e', not `ls
+	-d'.
+	(tramp-open-connection-setup-interactive-shell),
+	(tramp-open-connection-telnet),
+	(tramp-open-connection-rsh),
+	(tramp-open-connection-su),
+	(tramp-open-connection-multi),
+	(tramp-multi-connect-telnet),
+	(tramp-multi-connect-telnet),
+	(tramp-multi-connect-rlogin),
+	(tramp-multi-connect-su): Erase buffer before sending next
+	command.
+	(tramp-handle-make-directory): Correct order of arguments for
+	tramp-barf-unless-okay.  Maybe I should be using keyword arguments
+	in this case...
+	(tramp-handle-insert-directory): Make it work with wildcards, too.
+
