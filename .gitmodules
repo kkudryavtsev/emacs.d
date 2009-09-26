@@ -7,3 +7,6 @@
 [submodule "site-lisp/find-file-in-project"]
 	path = site-lisp/find-file-in-project
 	url = git@github.com:dougalcorn/find-file-in-project.git
+[submodule "site-lisp/emacs-ruby-electric"]
+	path = site-lisp/emacs-ruby-electric
+	url = git://github.com/rodimius/emacs-ruby-electric.git
