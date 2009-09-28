@@ -14,7 +14,7 @@
   (interactive)
   (let* ((funname (which-function))
 	 (fn (or (and (string-match "#\\(.*\\)" funname) (match-string 1 funname)) funname)))
-    (ruby-run-test " --name \"/" fn "/\"")))
+    (ruby-run-test (concat " --name \"/" fn "/\""))))
 
 (defun ruby-test-file ()
   (interactive)
