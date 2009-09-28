@@ -11,7 +11,7 @@
 
 (require 'ruby-mode)
 (require 'inf-ruby)
-;(require 'rhtml-mode)
+(require 'rhtml-mode)
 
 (require 'cl)
 (require 'toggle)
