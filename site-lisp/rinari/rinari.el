@@ -16,9 +16,9 @@
 (require 'cl)
 (require 'toggle)
 (require 'which-func)
-(require 'snippet)
+;(require 'snippet)
 
-(require 'rinari-abbrevs)
+;(require 'rinari-abbrevs)
 (require 'ruby-test)
 
 ;;; helpers for rinari-find-view
@@ -78,7 +78,7 @@ exec-to-string command, but it works and seems fast"
 (defun ruby-rake (task)
   "Run a rake command for the current project using compilation mode"
   (interactive (list (ido-completing-read "Run rake task: " (rake-tasks))))
-  (compile (concat "rake " task)))
+  (compile (ruby-rvm-compile (concat "rake " task))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; show-schema

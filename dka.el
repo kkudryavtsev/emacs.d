@@ -1059,3 +1059,14 @@ Return one of the entries in index-alist or nil."
   (eval-and-compile (require 'ansi-color))
   (ansi-color-filter-region eshell-last-output-start
                               eshell-last-output-end))
+
+(defun ido-find-tag ()
+    "Find a tag using ido"
+    (interactive)
+    (tags-completion-table)
+    (let (tag-names)
+      (mapc (lambda (x)
+              (unless (integerp x)
+                (push (prin1-to-string x t) tag-names)))
+            tags-completion-table)
+      (find-tag (ido-completing-read "Tag: " tag-names))))

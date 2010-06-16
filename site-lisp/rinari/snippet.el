@@ -1,4 +1,4 @@
-;; snippet.el -- insert snippets of text into a buffer
+;;; snippet.el -- insert snippets of text into a buffer
 
 ;; Copyright (C) 2005 Pete Kazmier
 
@@ -44,13 +44,6 @@
 ;;   for $${element} in $${sequence}:
 ;;       match = $${regexp}.search($${element})
 
-;;<string>def ${1:fname}(${2:self}):
-;;    ${3:pass}</string>
-
-;; def $${fname} in $${self}:
-;;     $${pass}
-
-
 ;; When a template is inserted into a buffer (could be triggered by an
 ;; abbrev expansion, or simply bound to some key), point is moved to
 ;; the first field denoted by the "$$" characters (configurable via
@@ -78,10 +71,21 @@
 ;; After tabbing past all of the fields, point is moved to the end of
 ;; the snippet, unless the user has specified a place within the
 ;; template with the `snippet-exit-identifier' ("$." by default).  For
-;; example: 
+;; example:
 
 ;;   if ($${test} {
 ;;       $.
+;;   }
+
+;; Indentation can be controlled on a per line basis by including the
+;; `snippet-indent' string within the template.  Most often one would
+;; include this at the beginning of a line; however, there are times
+;; when indentation is better performed in other parts of the line.
+;; The following shows how to use the functionality:
+
+;;   if ($${test}) {
+;;   $>this line would be indented
+;;   this line will be indented after being inserted$>
 ;;   }
 
 ;;; Usage:
@@ -107,7 +111,7 @@
 ;;                  "for"                     ; name
 ;;                  ""                        ; expansion
 ;;                  '(lambda ()               ; expansion hook
-;;                     (snippet-insert 
+;;                     (snippet-insert
 ;;                      "for $${element} in $${sequence}:")))
 
 ;; The above example does not work as expected because after the
@@ -139,7 +143,7 @@
 ;; simple abbrev.  For convenience, this package provides a macro
 ;; `snippet-abbrev' that can be used with much less effort:
 
-;;   (snippet-abbrev python-mode-abbrev-table            ; table
+;;   (snippet-abbrev 'python-mode-abbrev-table            ; table
 ;;                   "for"                               ; name
 ;;                   "for $${element} in $${sequence}:") ; template
 
@@ -147,7 +151,7 @@
 ;; particular abbrev table, the package provides another macro
 ;; `snippet-with-abbrev-table':
 
-;;   (snippet-with-abbrev-table python-mode-abbrev-table
+;;   (snippet-with-abbrev-table 'python-mode-abbrev-table
 ;;     ("for" .  "for $${element} in $${sequence}:")
 ;;     ("im"  .  "import $$")
 ;;     ("if"  .  "if $${True}:")
@@ -156,6 +160,19 @@
 ;; Be sure that the appropriate abbrev-table is loaded before using
 ;; the above otherwise you'll get an error.  I use the above in my
 ;; python-mode-hook.
+
+;; Finally, for those running a recent version of Emacs, you can
+;; disable snippet expansion in various parts of the buffer.  I use
+;; this to disable the above "for" expansion while typing comments in
+;; my python code.  Add the following line to your python-mode hook:
+
+;;   (add-hook 'pre-abbrev-expand-hook
+;;             (lambda ()
+;;               (setq local-abbrev-table
+;;                     (if (inside-comment-p)
+;;                         text-mode-abbrev-table
+;;                       python-mode-abbrev-table)))
+;;             nil t)))
 
 ;;; Implementation Notes:
 
@@ -188,11 +205,30 @@
 ;; activated again).  The idea is that the snippet concept should get
 ;; out of the users way as quickly as possible.
 
+;;; Comparisons to Other Packages
+
+;; tempo.el
+;;  - Template definition is very lispy (although powerful).  In
+;;    contrast, snippets are simple strings with minimal syntax.
+;;  - Template parameters can be prompted via minibuffer.  In
+;;    contrast, snippets use overlays to visually cue the user for
+;;    parameters.
+;;  + Templates can be wrapped around regions of text.
+;;
+
+;;; Known Limitations:
+
+;; - When one uses something like `dabbrev-expand', when the text is
+;;   inserted, it blows away a lot of the snippet.  Not sure why yet.
+;; - Using 'indent-according-to-mode' does not seem to behave well
+;;   with Python mode.  I have no idea why, the overlays end up
+;;   getting shifted around incorrectly.
+
 ;;; Code:
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 
-(defgroup snippet nil 
+(defgroup snippet nil
   "Insert a template with fields that con contain optional defaults."
   :prefix "snippet-"
   :group 'abbrev
@@ -228,8 +264,8 @@
   :type 'character
   :group 'snippet)
 
-(defcustom snippet-indent-char ?>
-  "*Character used to indicate that a line is to be indented."
+(defcustom snippet-indent "$>"
+  "*String used to indicate that a line is to be indented."
   :type 'character
   :group 'snippet)
 
@@ -246,7 +282,7 @@
 (define-key snippet-map (kbd "<S-tab>")         'snippet-prev-field)
 (define-key snippet-map (kbd "<S-iso-lefttab>") 'snippet-prev-field)
 
-(defstruct snippet 
+(defstruct snippet
   "Structure containing the overlays used to display a snippet.
 
 The BOUND slot contains an overlay to bound the entire text of the
@@ -283,7 +319,7 @@ deleted."
     bound))
 
 (defun snippet-make-field-overlay (&optional name)
-  "Create an overlay for a field in a snippet.  
+  "Create an overlay for a field in a snippet.
 Add the appropriate properties for the overlay to provide: a face used
 to display a field's default value, and modification hooks to remove
 the default text if the user starts typing."
@@ -300,7 +336,7 @@ the default text if the user starts typing."
 
 (defun snippet-fields-with-name (name)
   "Return a list of fields whose name property is equal to NAME."
-  (loop for field in (snippet-fields snippet) 
+  (loop for field in (snippet-fields snippet)
         when (eq name (overlay-get field 'name))
         collect field))
 
@@ -343,7 +379,7 @@ responsible for updating all other fields that share a common name."
         (inhibit-modification-hooks t))
     (when (and name after)
       (save-excursion
-        (dolist (like-field (set-difference (snippet-fields-with-name name) 
+        (dolist (like-field (set-difference (snippet-fields-with-name name)
                                             (list field)))
           (goto-char (overlay-start like-field))
           (delete-region (overlay-start like-field)
@@ -383,7 +419,7 @@ and the snippet reverts to normal text."
   (interactive)
   (let* ((bound (snippet-bound snippet))
          (fields (snippet-fields snippet))
-         (exit (snippet-exit-marker snippet))         
+         (exit (snippet-exit-marker snippet))
          (prev-pos (loop for field in (reverse fields)
                          for start = (overlay-start field)
                          when (> (point) start) return start)))
@@ -415,12 +451,6 @@ This effectively reverts the snippet to normal text in the buffer."
             (regexp-quote end)
             "\\)?")))
 
-(defun snippet-line-indentp (line)
-  "Return non-nil if LINE should be indented within the snippet.
-A line should be indented if the first character is equal to
-`snippet-indent-char'."
-  (char-equal snippet-indent-char (aref line 0)))
-
 (defun snippet-split-string (string &optional separators include-separators-p)
   "Split STRING into substrings and separators at SEPARATORS.
 Return a list of substrings and optional include the separators in the
@@ -436,8 +466,14 @@ list if INCLUDE-SEPARATORS-P is non-nil."
       (push (substring string start) list))
     (nreverse list)))
 
+(defun snippet-split-regexp ()
+  "Return a regexp to split the template into component parts."
+  (concat (regexp-quote snippet-line-terminator)
+          "\\|"
+          (regexp-quote snippet-indent)))
+
 (defun snippet-insert (template)
-  "Insert a snippet into the current buffer at point.  
+  "Insert a snippet into the current buffer at point.
 TEMPLATE is a string that may optionally contain fields which are
 specified by `snippet-field-identifier'.  Fields may optionally also
 include default values delimited by `snippet-field-default-beg-char'
@@ -474,14 +510,11 @@ more information."
     (setq snippet (make-snippet :bound (snippet-make-bound-overlay)))
     (let ((start (point))
           (count 0))
-      (dolist (line (snippet-split-string template "\n" t))
+      (dolist (line (snippet-split-string template (snippet-split-regexp) t))
         (cond ((string-equal snippet-line-terminator line)
                (insert "\n"))
-              ((snippet-line-indentp line)
-               (if (string-match "Python" mode-name)
-                   (py-indent-line)
-                 (insert "    "))
-               (insert (substring line 1)))
+              ((string-equal snippet-indent line)
+               (indent-according-to-mode))
               (t
                (insert line))))
       (move-overlay (snippet-bound snippet) start (1+ (point))))
@@ -490,38 +523,36 @@ more information."
     ;; Step 3: Insert the exit marker so we know where to move point
     ;; to when user is done with snippet.  If they did not specify
     ;; where point should land, set the exit marker to the end of the
-    ;; snippet. 
+    ;; snippet.
     (goto-char (overlay-start (snippet-bound snippet)))
     (while (re-search-forward (regexp-quote snippet-exit-identifier)
-                              (overlay-end (snippet-bound snippet)) 
+                              (overlay-end (snippet-bound snippet))
                               t)
       (replace-match "")
       (setf (snippet-exit-marker snippet) (point-marker)))
-    
+
     (unless (snippet-exit-marker snippet)
       (let ((end (overlay-end (snippet-bound snippet))))
-        (if (eq end (point-max))
-            (end-of-line)
-          (goto-char (1- end))))
+        (goto-char (if (= end (point-max)) end (1- end))))
       (setf (snippet-exit-marker snippet) (point-marker)))
-  
+
     (set-marker-insertion-type (snippet-exit-marker snippet) t)
 
     ;; Step 4: Create field overlays for each field and insert any
     ;; default values for the field.
     (goto-char (overlay-start (snippet-bound snippet)))
     (while (re-search-forward (snippet-field-regexp)
-                              (overlay-end (snippet-bound snippet)) 
+                              (overlay-end (snippet-bound snippet))
                               t)
       (let ((field (snippet-make-field-overlay (match-string 2)))
             (start (match-beginning 0)))
         (push field (snippet-fields snippet))
         (replace-match (if (match-beginning 2) "\\2" ""))
         (move-overlay field start (point))))
-    
+
     ;; These are reversed so they are in order of how they appeared in
     ;; the template as we index into this list when cycling field to
-    ;; field. 
+    ;; field.
     (setf (snippet-fields snippet) (reverse (snippet-fields snippet))))
 
   ;; Step 5: Position the point at the first field or the end of the
@@ -531,7 +562,7 @@ more information."
   ;; will go past it).
   (let ((bound (snippet-bound snippet))
         (first (car (snippet-fields snippet))))
-    (if (and first (eq (overlay-start bound) (overlay-start first)))
+    (if (and first (= (overlay-start bound) (overlay-start first)))
         (goto-char (overlay-start first))
       (goto-char (overlay-start (snippet-bound snippet)))
       (snippet-next-field))))
@@ -548,12 +579,12 @@ The function name is composed of \"snippet-abbrev-\", the abbrev table
 name, and the name of the abbrev.  If the abbrev table name ends in
 \"-abbrev-table\", it is stripped."
   (let ((abbrev-expansion (intern
-                           (concat "snippet-abbrev-" 
+                           (concat "snippet-abbrev-"
                                    (snippet-strip-abbrev-table-suffix
                                     (symbol-name abbrev-table))
                                    "-"
                                    abbrev-name))))
-    (fset abbrev-expansion 
+    (fset abbrev-expansion
           `(lambda ()
              ,(format (concat "Abbrev expansion hook for \"%s\".\n"
                               "Expands to the following snippet:\n\n%s")
@@ -600,4 +631,3 @@ See also `snippet-abbrev."
               collect (list 'snippet-abbrev table name template))))))
 
 (provide 'snippet)
-

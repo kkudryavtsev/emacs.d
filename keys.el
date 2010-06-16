@@ -28,3 +28,4 @@
 (global-set-key (kbd "C-x t") 'find-file-in-project)
 (global-set-key (kbd "C-x 4 t") 'find-file-in-project-other-window)
 (global-set-key (kbd "C-x C-d") 'find-grep-dired)
+(global-set-key (kbd "M-.") 'find-tag)

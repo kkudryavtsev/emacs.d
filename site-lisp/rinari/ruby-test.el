@@ -26,7 +26,23 @@
 
 (defun ruby-run-test(&optional args)
   "The actual compile command to run an individual rails test (either file or function)"
-    (compile (concat "cd " (rails-root) ";ruby -I" (rails-root) "/test " (buffer-file-name) args)))
+  (let ((compile-command (concat "ruby -I" (rails-root) "/test " (buffer-file-name) args))
+        (current-buffer (current-buffer)))
+  (save-window-excursion
+    (save-excursion
+      (save-some-buffers (not compilation-ask-about-save) nil)
+      (dired (rails-root))
+      (compile (ruby-rvm-compile compile-command))
+      (dired (rails-root))
+      (bury-buffer)))))
+
+(defun ruby-rvm-compile(command)
+  (concat "cd " (rails-root) ";"
+          " ( if [ -f " (rails-root) ".project_env ]; then"
+          " source " (rails-root) ".project_env;"
+          " rvm use $RVM_USE; "
+          "fi; " 
+          command ")"))
 
 (defun autotest ()
   (interactive)

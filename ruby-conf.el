@@ -8,8 +8,14 @@
 ;; after much consternation, something is getting a bad regexp into this list that breaks matching on ruby tests.  
 (setq compilation-error-regexp-alist nil)
 (add-to-list 'compilation-error-regexp-alist
-             '("\\([^ \t:\[]+\\):\\([0-9]+\\):in" 1 2))
+             '("\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):in" 2 3 nil 2 1))
+(add-to-list 'compilation-error-regexp-alist
+             '("^\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):\\s +[wW]arning: " 2 3 nil 1 1))
 (setq compilation-mode-font-lock-keywords nil)
+(add-to-list 'compilation-mode-font-lock-keywords
+             '("ruby -I.*\\(test/[^)]+\\)" (1 font-lock-function-name-face)))
+(add-to-list 'compilation-mode-font-lock-keywords
+             '("\\(<i>.*</i>\\)" (1 font-lock-comment-face)))
 (add-to-list 'compilation-mode-font-lock-keywords
              '("^\\(test[^\(]+\\)" (1 font-lock-function-name-face)))
 (add-to-list 'compilation-mode-font-lock-keywords
@@ -30,15 +36,15 @@
        (progn (goto-char (point-max)) (toggle-read-only -1) (inferior-ruby-mode) ))
       ((string-equal major-mode "inferior-ruby-mode") (compilation-mode))))
 
-(defun snippet-insert-and-indent (this-snippet-string)
-  (let ((start (point)))
-    (snippet-insert this-snippet-string)
-    (indent-region start (+ (point) 5 (length this-snippet-string)))))
+;; (defun snippet-insert-and-indent (this-snippet-string)
+;;   (let ((start (point)))
+;;     (snippet-insert this-snippet-string)
+;;     (indent-region start (+ (point) 5 (length this-snippet-string)))))
 
 ;(setq erb-background "grey70") ; must do before rhtml-mode is loaded, i think
 
 (require 'rinari)
-(load-file (concat my-config-dir "dka-ruby-snippets.el"))
+;(load-file (concat my-config-dir "dka-ruby-snippets.el"))
 (require 'find-file-in-project)
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 (require 'ri-ruby)
@@ -53,10 +59,11 @@
 ;(set-face-background 'erb-face "grey18")
 ;(set-face-background 'erb-delim-face "grey18")
 
-;(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
-(defun my-ruby-mode-hook () nil)
-;  (ruby-electric-mode)
+(require 'ruby-electric)
+(defun my-ruby-mode-hook () 
+  (ruby-electric-mode))
 ;  (hs-minor-mode)
 ;  (if (= emacs-major-version 22) (reveal-mode))
 ;  (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
