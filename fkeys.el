@@ -6,7 +6,7 @@
 (global-set-key [f2] 'eshell)
 (global-set-key (kbd "M-<f2>") '(lambda () (interactive) (eshell t)))
 (global-set-key [(control f2)] 'shell-command)
-(global-set-key [f5] 'recompile)
+(global-set-key [f5] 'compile)
 (global-set-key (kbd "M-<f5>") 'ruby-rake)
 (global-set-key [f6] 'ruby-test-file)
 (global-set-key (kbd "M-<f6>") 'ruby-test-function)
