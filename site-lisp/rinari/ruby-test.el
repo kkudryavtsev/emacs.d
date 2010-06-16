@@ -38,11 +38,9 @@
 
 (defun ruby-rvm-compile(command)
   (concat "cd " (rails-root) ";"
-          " ( if [ -f " (rails-root) ".project_env ]; then"
-          " source " (rails-root) ".project_env;"
-          " rvm use $RVM_USE; "
-          "fi; " 
-          command ")"))
+          (if (file-exists-p (concat (rails-root) ".project_env"))
+              (concat " source " (rails-root) ".project_env;"))
+          command))
 
 (defun autotest ()
   (interactive)
