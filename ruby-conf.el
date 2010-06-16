@@ -10,7 +10,7 @@
 (add-to-list 'compilation-error-regexp-alist
              '("\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):in" 2 3 nil 2 1))
 (add-to-list 'compilation-error-regexp-alist
-             '("^\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):\\s +[wW]arning: " 2 3 nil 1 1))
+             '("^\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):\\s *[wW]arning: " 2 3 nil 1 1))
 (setq compilation-mode-font-lock-keywords nil)
 (add-to-list 'compilation-mode-font-lock-keywords
              '("ruby -I.*\\(test/[^)]+\\)" (1 font-lock-function-name-face)))
