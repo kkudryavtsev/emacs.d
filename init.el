@@ -173,8 +173,9 @@
  '(ansi-color-for-comint-mode (quote filter))
  '(column-number-mode t)
  '(comint-scroll-to-bottom-on-input t)
+ '(compilation-ask-about-save nil)
  '(compilation-mouse-motion-initiate-parsing nil)
- '(compilation-scroll-output (quote first-error))
+ '(compilation-scroll-output t)
  '(complex-buffers-menu-p nil)
  '(default-frame-plist (quote (height 55 width 150)))
  '(delete-key-deletes-forward t)
@@ -232,6 +233,7 @@
   ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-Bitstream_Vera_Sans_Mono"))))
  '(bold-italic ((t (:bold t :italic t))))
+ '(compilation-warning ((((class color) (min-colors 16)) (:foreground "Orange"))))
  '(cursor ((t (:background "yellow"))))
  '(diff-file-header-face ((t (:bold t))) t)
  '(diff-index-face ((t (:bold t))) t)

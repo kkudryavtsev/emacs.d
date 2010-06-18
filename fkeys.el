@@ -12,5 +12,5 @@
 (global-set-key (kbd "M-<f6>") 'ruby-test-function)
 (global-set-key [f7] 'toggle-ruby-compilation-mode)
 
-(global-set-key [f9] 'compile)
-(global-set-key [f10] 'svn-examine)
+(global-set-key [f9] 'rgrep)
+(global-set-key [f10] 'magit-status)

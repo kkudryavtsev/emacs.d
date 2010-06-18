@@ -39,7 +39,7 @@
 (defun ruby-rvm-compile(command)
   (concat "cd " (rails-root) ";"
           (if (file-exists-p (concat (rails-root) ".project_env"))
-              (concat " source " (rails-root) ".project_env;"))
+              (concat " source " (rails-root) ".project_env; "))
           command))
 
 (defun autotest ()
