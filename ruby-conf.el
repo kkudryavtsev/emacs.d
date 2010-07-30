@@ -12,7 +12,7 @@
 (add-to-list 'compilation-error-regexp-alist
              '("^\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):\\s *[wW]arning: " 2 3 nil 1 1))
 (add-to-list 'compilation-error-regexp-alist
-             '("^\\(config.gem: .*\\)" 2 3 nil 1 nil))
+             '("^\\(config.gem: .*\\)" nil nil nil 1 nil))
 (setq compilation-mode-font-lock-keywords nil)
 (add-to-list 'compilation-mode-font-lock-keywords
              '("ruby -I.*\\(test/[^)]+\\)" (1 font-lock-function-name-face)))
