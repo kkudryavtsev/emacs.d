@@ -10,6 +10,8 @@
 (add-to-list 'compilation-error-regexp-alist
              '("\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):in" 2 3 nil 2 1))
 (add-to-list 'compilation-error-regexp-alist
+             '("\\[\\(\\([^:]+\\):\\([0-9]+\\)\\)\\]:" 2 3 nil 2 1))
+(add-to-list 'compilation-error-regexp-alist
              '("^\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):\\s *[wW]arning: " 2 3 nil 1 1))
 (add-to-list 'compilation-error-regexp-alist
              '("^\\(config.gem: .*\\)" nil nil nil 1 nil))
@@ -63,7 +65,7 @@
 ;(set-face-background 'erb-face "grey18")
 ;(set-face-background 'erb-delim-face "grey18")
 
-(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+;(remove-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 (require 'ruby-electric)
 (defun my-ruby-mode-hook () 
