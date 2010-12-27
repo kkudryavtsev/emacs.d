@@ -12,17 +12,33 @@
 (defun ruby-test-function ()
   "Test the current ruby function (must be runable via ruby <buffer> --name <test>)."
   (interactive)
-  (let* ((funname (which-function))
-	 (fn (or (and (string-match "#\\(.*\\)" funname) (match-string 1 funname)) funname)))
-    (ruby-run-test (concat " --name \"/" fn "/\""))))
+  (if (ruby-is-spec)
+      (let* ((fn (and (re-search-backward "^\\s +it\\s +[\"']\\(.*?\\)[\"']\\s +do")
+                      (match-string 1))))
+        (ruby-run-spec (concat " --example '" fn "'")))
+    (let* ((funname (which-function))
+           (fn (or (and (string-match "#\\(.*\\)" funname) (match-string 1 funname)) funname)))
+      (ruby-run-test (concat " --name \"/" fn "/\"")))))
 
+(defun ruby-is-spec() (string-match "_spec.rb$" buffer-file-name))
+(defun ruby-is-test() (string-match "_test.rb$" buffer-file-name))
 (defun ruby-test-file ()
   (interactive)
-  (if (string-match "_test.rb$" buffer-file-name)
+  (if (ruby-is-test)
       (ruby-run-test)
-    (toggle-buffer)
-    (ruby-run-test)
-    (toggle-buffer)))
+    (if (ruby-is-spec)
+        (ruby-run-spec)
+      (toggle-buffer)
+      (ruby-run-test)
+      (toggle-buffer))))
+
+(defun ruby-run-spec(&optional args)
+  "The actual compile command to run an individual rspec (either file or function)"
+  (let ((ruby-compile-command 
+         (concat "bundle exec rspec  --no-color -I" (rails-root) "spec " (buffer-file-name) args))
+        (current-buffer (current-buffer)))
+    (compile (ruby-rvm-compile ruby-compile-command))
+    ))
 
 (defun ruby-run-test(&optional args)
   "The actual compile command to run an individual rails test (either file or function)"
