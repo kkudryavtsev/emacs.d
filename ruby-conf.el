@@ -6,32 +6,23 @@
 ;(add-to-list 'compilation-error-regexp-alist 
 ;             '("test[a-zA-Z0-9_]*([A-Z][a-zA-Z0-9_]*) \\[\\(.*\\):\\([0-9]+\\)\\]:" 1 2))
 ;; after much consternation, something is getting a bad regexp into this list that breaks matching on ruby tests.  
-(setq compilation-error-regexp-alist nil)
-(add-to-list 'compilation-error-regexp-alist
-             '("\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):in" 2 3 nil 2 1))
-(add-to-list 'compilation-error-regexp-alist
-             '("\\[\\(\\([^:]+\\):\\([0-9]+\\)\\)\\]:" 2 3 nil 2 1))
-(add-to-list 'compilation-error-regexp-alist
-             '("^\\(\\([^ \t:\[]+\\):\\([0-9]+\\)\\):\\s *[wW]arning: " 2 3 nil 1 1))
-(add-to-list 'compilation-error-regexp-alist
-             '("^\\(config.gem: .*\\)" nil nil nil 1 nil))
-(setq compilation-mode-font-lock-keywords nil)
-(add-to-list 'compilation-mode-font-lock-keywords
-             '("ruby -I.*\\(test/[^)]+\\)" (1 font-lock-function-name-face)))
-(add-to-list 'compilation-mode-font-lock-keywords
-             '("\\(rake .*\\)" (1 font-lock-function-name-face)))
-(add-to-list 'compilation-mode-font-lock-keywords
-             '("\\(<i>.*</i>\\)" (1 font-lock-comment-face)))
-(add-to-list 'compilation-mode-font-lock-keywords
-             '("^\\(test[^\(]+\\)" (1 font-lock-function-name-face)))
-(add-to-list 'compilation-mode-font-lock-keywords
-             '("^\\(test[^\(]+\\)(\\([^\)]+\\))" (2 font-lock-constant-face)))
-(add-to-list 'compilation-mode-font-lock-keywords
-             '("Started\n[.EF]*\\([EF]\\)[.EF]*\nFinished" (1 compilation-error-face)))
-(add-to-list 'compilation-mode-font-lock-keywords 
-             '("\\([1-9][0-9]* \\(failures\\|errors\\)\\)" (1 compilation-error-face)))
-(add-to-list 'compilation-mode-font-lock-keywords 
-             '("^[ \t]*\\(.*, 0 failures, 0 errors\\)" (1 compilation-info-face)))
+(setq compilation-error-regexp-alist
+      '(("\\(/?\\([^ \n\t:\[]+[a-zA-Z]\\):\\([0-9]+\\)\\)" 2 3 nil 2 1)
+        ("\\[\\(/?\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 2 3 nil 2 1)
+        ("^\\(\\([^ \n\t:\[]+\\):\\([0-9]+\\)\\):*\\s *[wW]arning: " 2 3 nil 1 1)
+        ("^\\(config.gem: .*\\)" nil nil nil 1 nil)
+        ))
+(setq compilation-mode-font-lock-keywords
+      '(("ruby -I\\(.*\\(test/[^)]+\\)\\)+" (2 font-lock-function-name-face))
+        ("rspec -I\\(.*\\(spec/[^)]+\\)\\)+" (2 font-lock-function-name-face))
+        ("\\(rake .*\\)" (1 font-lock-function-name-face))
+        ("\\(<i>.*</i>\\)" (1 font-lock-comment-face))
+        ("^\\(test[^\(]+\\)" (1 font-lock-function-name-face))
+        ("^\\(test[^\(]+\\)(\\([^\)]+\\))" (2 font-lock-constant-face))
+        ("Started\n[.EF]*\\([EF]\\)[.EF]*\nFinished" (1 compilation-error-face))
+        ("\\([1-9][0-9]* \\(failure\\|errors\\)\\)" (1 compilation-error-face))
+        ("^[ \t]*\\(.*examples, 0 failures\\)" (1 compilation-info-face))
+        ("^[ \t]*\\(.*, 0 failures, 0 errors\\)" (1 compilation-info-face))))
 
  
 (defun toggle-ruby-compilation-mode ()
@@ -42,54 +33,13 @@
        (progn (goto-char (point-max)) (toggle-read-only -1) (inferior-ruby-mode) ))
       ((string-equal major-mode "inferior-ruby-mode") (compilation-mode))))
 
-;; (defun snippet-insert-and-indent (this-snippet-string)
-;;   (let ((start (point)))
-;;     (snippet-insert this-snippet-string)
-;;     (indent-region start (+ (point) 5 (length this-snippet-string)))))
-
-;(setq erb-background "grey70") ; must do before rhtml-mode is loaded, i think
-
 (require 'rinari)
 ;(load-file (concat my-config-dir "dka-ruby-snippets.el"))
-(require 'find-file-in-project)
-(setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
-(require 'ri-ruby)
+
 (require 'rails-shoulda)
-
 (setq which-func-functions '(rails-shoulda:current-context))
-(setq auto-mode-alist
-      (append '(("\\.erb" . rhtml-mode) 
-                ("\\.builder" . ruby-mode)
-                ("\\.rjs" . ruby-mode)) auto-mode-alist))
-(setq find-file-in-project-excludes '())
-;(set-face-background 'erb-face "grey18")
-;(set-face-background 'erb-delim-face "grey18")
-
-;(remove-hook 'ruby-mode-hook 'my-ruby-mode-hook)
-
-(require 'ruby-electric)
-(defun my-ruby-mode-hook () 
-  (ruby-electric-mode))
-;  (hs-minor-mode)
-;  (if (= emacs-major-version 22) (reveal-mode))
-;  (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
-;  (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
-
-
-(when (= emacs-major-version 22)
-;  (require 'ido)
-;  (ido-mode t)
-;  (ido-toggle-prefix)
-  (file-name-shadow-mode t)
-  (add-to-list 'hs-special-modes-alist
-	       (list 'ruby-mode
-		     (concat ruby-block-beg-re "\|{")
-		     (concat ruby-block-end-re "\|}")
-		     "#"
-		     'ruby-forward-sexp nil)))
 
 ;; Thanks PragDave:
-
 (defun ruby-xmp-region (reg-start reg-end)
   "Pipe the region through Ruby's xmp utility and replace
      the region with the result."
@@ -97,6 +47,7 @@
   (shell-command-on-region reg-start reg-end
 			   "ruby -r xmp -n -e 'xmp($_, \"%l\t\t# %r\n\")'" t))
 
+;; touch the right files to make autotest re-run the right stuff
 (defun ruby-autotest-run-all ()
   (interactive)
   (save-excursion
@@ -107,20 +58,13 @@
 (defun ruby-autotest-run-file ()
   (interactive)
   (save-window-excursion
-    (switch-to-buffer (get-buffer (ido-completing-read 
-                                   "Enter buffer to run tests for: " 
-                                   (mapcar (lambda (buffer) (buffer-name buffer)) (buffer-list))
-                                   nil t nil nil (buffer-name (current-buffer)))))
+    (switch-to-buffer 
+     (get-buffer (ido-completing-read 
+                  "Enter buffer to run tests for: " 
+                  (mapcar (lambda (buffer) (buffer-name buffer)) (buffer-list))
+                  nil t nil nil (buffer-name (current-buffer)))))
     (set-buffer-modified-p t)
     (save-buffer)))
-
-(define-key ruby-mode-map (kbd "A-t") 'file-file-in-project)
-
-;; (define-key ruby-mode-map (kbd "C-c t r") 'ruby-autotest-run-all)
-;; (define-key ruby-mode-map (kbd "C-c t u") 
-;; 	(lambda () (interactive) (compile "rake test:units")))
-;; (define-key ruby-mode-map (kbd "C-c t f") 'ruby-autotest-run-file)
-;; (define-key ruby-mode-map (kbd "C-c t m") 'ruby-test-function)
 
 (setq jw-test-warnings nil)
 
@@ -139,10 +83,10 @@ buffer."
       (setq mappings (toggle-style mappings)))
   (let ((mapping (toggle-filename (buffer-file-name) (or mappings toggle-mappings))))
     (if (stringp mapping)
-				(find-file-other-window mapping)
+        (find-file-other-window mapping)
       (if (functionp mapping)
-					(funcall mapping (buffer-file-name))
-				(message (concat "Match not found for " (buffer-file-name)))))))
+          (funcall mapping (buffer-file-name))
+        (message (concat "Match not found for " (buffer-file-name)))))))
 
 
 (define-key ruby-mode-map (kbd "C-c 4 t") 'toggle-buffer-other-window)
@@ -163,3 +107,17 @@ buffer."
   (insert "end")
   (ruby-indent-line t)
   (end-of-line))
+
+(defun ri-bind-key ()
+  (local-set-key [f1] 'yari))
+
+(add-hook 'ruby-mode-hook 'ri-bind-key)
+
+(mapcar '(lambda (binding) (add-to-list 'auto-mode-alist binding))
+        '(("\\.rb$" . ruby-mode)
+          ;; ("\\.rhtml$" . rhtml-mode)
+          ;; ("\\.erb" . rhtml-mode)
+          ("\\.rake$" . ruby-mode)
+          ("Gemfile$" . ruby-mode)
+          ("\\.builder" . ruby-mode)
+          ("\\.rjs" . ruby-mode)))
