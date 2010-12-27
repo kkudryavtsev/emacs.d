@@ -53,7 +53,7 @@
   ;; disable if you don't want it...
   (rhtml-activate-fontification))
 
-(add-to-list 'auto-mode-alist '("\\.rhtml$" . rhtml-mode))
+;(add-to-list 'auto-mode-alist '("\\.rhtml$" . rhtml-mode))
 
 (define-key ruby-mode-map
   "\C-c\C-v" (lambda () (interactive) (toggle-buffer 'rails-view)))
