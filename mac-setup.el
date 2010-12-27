@@ -15,7 +15,11 @@
 (define-key mac-key-mode-map (kbd "A-l") 'goto-line)
 
 (require 'osx-plist)
-(osx-plist-update-environment)
+;;(osx-plist-update-environment)
+(let ((path "/Users/dalcorn/.rvm/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/binxs"))
+  (mapc (lambda (dir)
+	  (add-to-list 'exec-path dir))
+	(parse-colon-path path)))
 
 (defun copy-from-osx ()
   (shell-command-to-string "pbpaste"))
