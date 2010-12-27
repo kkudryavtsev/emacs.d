@@ -1,0 +1,7 @@
+<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+  <transformURI fromPattern="*.xml" toPattern="*.rnc"/>
+  <uri pattern="*.xsd" typeId="XML Schema"/>
+  <namespace ns="http://www.w3.org/2001/XMLSchema" typeId="XML Schema"/>
+  <documentElement localName="schema" typeId="XML Schema"/>
+  <typeId id="XML Schema" uri="xmlschema.rnc"/>
+</locatingRules>
