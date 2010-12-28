@@ -12,5 +12,5 @@
               (if (not (and compwin-buffer
                             (ecb-compilation-buffer-p compwin-buffer)))
                   (ecb-toggle-compile-window -1)))))
-
+(setq ecb-tip-of-the-day nil)
 (ecb-activate)
