@@ -175,6 +175,7 @@
  '(complex-buffers-menu-p nil)
  '(default-frame-plist (quote (height 55 width 150)))
  '(delete-key-deletes-forward t)
+ '(desktop-save-mode t)
  '(display-time-day-and-date t)
  '(ecb-compile-window-height 0.3)
  '(ecb-compile-window-prevent-shrink-below-height nil)
