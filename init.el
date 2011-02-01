@@ -182,7 +182,7 @@
  '(delete-key-deletes-forward t)
  '(desktop-save-mode t)
  '(display-time-day-and-date t)
- '(ecb-compilation-buffer-names (quote (("*Calculator*") ("*vc*") ("*vc-diff*") ("*Apropos*") ("*Occur*") ("*shell*") ("\\*[cC]ompilation.*\\*" . t) ("\\*i?grep.*\\*" . t) ("*JDEE Compile Server*") ("*Help*") ("*Completions*") ("*Compile-log*") ("*bsh*") ("*Messages*"))))
+ '(ecb-compilation-buffer-names (quote (("*Calculator*") ("*vc*") ("*vc-diff*") ("*Apropos*") ("*Occur*") ("*shell*") ("\\*[cC]ompilation.*\\*" . t) ("\\*i?grep.*\\*" . t) ("*JDEE Compile Server*") ("*Help*") ("*Completions*") ("*Compile-log*") ("*bsh*") ("*Messages*") ("*magit-edit-log*") ("*Backtrace*"))))
  '(ecb-compile-window-height 0.3)
  '(ecb-compile-window-prevent-shrink-below-height nil)
  '(ecb-history-make-buckets (quote never))
