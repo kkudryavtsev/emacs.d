@@ -7,10 +7,10 @@
 ;             '("test[a-zA-Z0-9_]*([A-Z][a-zA-Z0-9_]*) \\[\\(.*\\):\\([0-9]+\\)\\]:" 1 2))
 ;; after much consternation, something is getting a bad regexp into this list that breaks matching on ruby tests.  
 (setq compilation-error-regexp-alist
-      '(("\\(/?\\([^ \n\t:\[]+[a-zA-Z]\\):\\([0-9]+\\)\\)" 2 3 nil 2 1)
-        ("\\[\\(/?\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 2 3 nil 2 1)
-        ("^\\(\\([^ \n\t:\[]+\\):\\([0-9]+\\)\\):*\\s *[wW]arning: " 2 3 nil 1 1)
-        ("^\\(config.gem: .*\\)" nil nil nil 1 nil)
+      '(("\\(\\([^ \n\t:\[]+[a-zA-Z]\\):\\([0-9]+\\)\\)" 2 3 nil 2 1)
+        ("\\[\\(\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 2 3 nil 2 1)
+        ("\\(\\([^ \n\t:\[]+\\):\\([0-9]+\\)\\):*\\s *[wW]arning: " 2 3 nil 1 1)
+        ("\\(config.gem: .*\\)" nil nil nil 1 nil)
         ))
 (setq compilation-mode-font-lock-keywords
       '(("ruby -I\\(.*\\(test/[^)]+\\)\\)+" (2 font-lock-function-name-face))
