@@ -56,6 +56,7 @@
 (load-file (concat my-config-dir "ruby-conf.el"))
 ;(load-file (concat my-config-dir "display-time-config.el"))
 ;(load-file (concat my-config-dir "elscreen-config.el"))
+(load-file (concat my-config-dir "coffeescript-config.el"))
 (add-hook 'eshell-mode-hook '(lambda () (load-file (concat my-config-dir "eshell-funcs.el"))))
 (load-file (concat my-config-dir "readpassword-remap.el"))
 (load-file (concat my-config-dir "keys.el"))
