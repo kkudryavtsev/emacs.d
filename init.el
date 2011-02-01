@@ -65,6 +65,9 @@
 (load-file (concat my-config-dir "nxhtml-config.el"))
 (load-file (concat my-config-dir "yas-config.el"))
 (load-file (concat my-config-dir "ecb-config.el"))
+(load-file (concat my-config-dir "hideshowvis-config.el"))
+
+
 
 ;; Add color to a shell running in emacs 'M-x shell'
 ;(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
