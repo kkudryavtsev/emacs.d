@@ -67,13 +67,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rake
 
+(defvar rake-task-list nil "List of the rake tasks for a given project")
+(defun rake-reset-tasks()
+  (interactive)
+  (setq rake-task-list nil))
 (defun rake-tasks()
    "Return a list of all the rake tasks defined in the current
 projects.  I know this is a hack to put all the logic in the
 exec-to-string command, but it works and seems fast"
-   (delq nil (mapcar '(lambda(line)
+   (if rake-task-list
+       rake-task-list
+     (setq rake-task-list (delq nil (mapcar '(lambda(line)
 			(if (string-match "rake \\([^ ]+\\)" line) (match-string 1 line)))
-		     (split-string (shell-command-to-string (ruby-rvm-compile "rake -T")) "[\n]"))))
+		     (split-string (shell-command-to-string (ruby-rvm-compile "rake -T")) "[\n]"))))))
 
 (defun ruby-rake (task)
   "Run a rake command for the current project using compilation mode"

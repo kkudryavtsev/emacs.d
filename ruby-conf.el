@@ -24,7 +24,6 @@
         ("^[ \t]*\\(.*examples, 0 failures\\)" (1 compilation-info-face))
         ("^[ \t]*\\(.*, 0 failures, 0 errors\\)" (1 compilation-info-face))))
 
- 
 (defun toggle-ruby-compilation-mode ()
      "Toggle between inferior-ruby-mode and compilation-mode"
      (interactive)
