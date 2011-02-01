@@ -1,8 +1,7 @@
-(define-key function-key-map [(escape)] [?\C-c]) ; make escape equivalent to C-c
+;(define-key function-key-map [(escape)] [?\C-c]) ; make escape equivalent to C-c
 ;(global-set-key (kbd "C-x C-b") 'isearchb-activate)
 (global-set-key (kbd "<home>") 'beginning-of-buffer)
 (global-set-key (kbd "<end>") 'end-of-buffer)
-(global-set-key (kbd "C-c m") 'eshell)
 (global-set-key (kbd "C-x C-d") 'find-dired)
 (global-set-key (kbd "C-$") 'dict-lookup-words)
 (global-set-key (kbd "C-c [") 'occur)
@@ -22,6 +21,7 @@
 
 
 (global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-c m") 'magit-status)
 (global-set-key (kbd "C-c g") 'imenu)
 (global-set-key [(control x) k] 'context-kill)
 (global-set-key (kbd "M-/") 'dabbrev-expand)
