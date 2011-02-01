@@ -89,9 +89,9 @@ Afterwards always the compile-window of ECB is selected."
   (interactive "P")
   (if (not (numberp ecb-compile-window-height))
       (ecb-error "This command needs a persistent compile window!")
-    (if choose-buffer
-        (switch-to-buffer (completing-read "ECB compilation buffer: "
-                                           (ecb-compilation-get-buffers)))
+    (if t
+        (switch-to-buffer (ido-completing-read "ECB compilation buffer: "
+                                           (mapcar 'car (ecb-compilation-get-buffers))))
       
       (let* ((compilation-buffers (ecb-compilation-get-buffers))
              ;; This works even if ecb-compile-window is nil or not alive

@@ -5686,7 +5686,7 @@ if no compile-window is visible."
                                ecb-compile-window-height-lines))
                     (ecb-layout-debug-error "ecb-toggle-compile-window-height: max-height: %s, curr-win-height: %s"
                                             max-height (ecb-window-full-height))
-                    (enlarge-window (- max-height (ecb-window-full-height))))
+                    (enlarge-window (truncate (- max-height (ecb-window-full-height)))))
                 (setq max-height
                       (cond ((equal ecb-enlarged-compilation-window-max-height
                                     'half)
