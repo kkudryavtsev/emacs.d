@@ -67,10 +67,15 @@
 
 (setq jw-test-warnings nil)
 
-(defun ansi-colorize-buffer
+(defun ansi-colorize-buffer()
   "Apply ansi colors to the entire buffer"
   (interactive)
   (ansi-color-apply-on-region (point-min) (point-max)))
+
+(defun ansi-filter-buffer()
+  "Filter all ansi color sequences from the buffer"
+  (interactive)
+  (ansi-color-filter-region (point-min)(point-max)))
 
 (defun toggle-buffer-other-window (&optional mappings)
   "Opens a related file to the current buffer using matching
