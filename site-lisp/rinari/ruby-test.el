@@ -55,13 +55,13 @@
   "The actual compile command to run an individual rails test (either file or function)"
   (let ((ruby-compile-command (concat "rm log/test.log; ruby -Itest " (buffer-file-name) args))
         (current-buffer (current-buffer)))
-  (save-window-excursion
     (save-excursion
       (save-some-buffers (not compilation-ask-about-save) nil)
       (dired (rails-root))
       (compile (ruby-rvm-compile ruby-compile-command))
+      (goto-char (point-max))
       (dired (rails-root))
-      (bury-buffer)))))
+      (bury-buffer))))
 
 (defun ruby-rvm-compile(command)
   (concat "cd " (rails-root) ";"
@@ -77,3 +77,17 @@
     (comint-send-string buffer "autotest\n")))
 
 (provide 'ruby-test)
+
+(defun comp-mult-name (mjr-mode)
+  "Suitable for assignment to compilation-buffer-name-function"
+  (concat "*" (downcase mjr-mode)
+          " " (file-name-nondirectory
+               (substring (if (buffer-file-name)
+                              (file-name-directory (buffer-file-name))
+                            (expand-file-name default-directory))
+                          0 -1)) "*"))
+
+(setq
+ ;; Usually compile the same way so don't ask unless I give prefix arg
+ compilation-read-command nil
+ compilation-buffer-name-function	'comp-mult-name)
