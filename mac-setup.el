@@ -13,6 +13,7 @@
 (define-key mac-key-mode-map (kbd "M-A-p") 'pdf-preview-buffer-with-faces)
 (define-key mac-key-mode-map (kbd "A-t") 'find-file-in-project)
 (define-key mac-key-mode-map (kbd "A-l") 'goto-line)
+(define-key mac-key-mode-map (kbd "A-F") 'project-grep)
 
 (require 'osx-plist)
 ;;(osx-plist-update-environment)

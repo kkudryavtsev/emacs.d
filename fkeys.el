@@ -3,7 +3,7 @@
 (global-set-key [(shift f1)] '(lambda () (interactive) (find-file "~/emacs.d/keys.el")))
 (global-set-key (kbd "C-S-<f1>") '(lambda () (interactive) (load-file "~/emacs.d/keys.el")))
 
-(global-set-key [f2] 'eshell)
+(global-set-key [f2] 'shell)
 (global-set-key (kbd "M-<f2>") '(lambda () (interactive) (eshell t)))
 (global-set-key [(control f2)] 'shell-command)
 (global-set-key (kbd "M-r") 'ruby-rake)

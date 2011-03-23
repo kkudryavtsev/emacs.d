@@ -8,7 +8,8 @@
 ;; after much consternation, something is getting a bad regexp into this list that breaks matching on ruby tests.  
 (setq compilation-error-regexp-alist
       '(("\\(\\([^ \n\t:\[]+[a-zA-Z]\\):\\([0-9]+\\)\\)" 2 3 nil 2 1)
-        ("\\[\\(\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 2 3 nil 2 1)
+;        ("\\[\\(\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 2 3 nil 2 1)
+        ("\\(\\[/\\)?\\(\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 3 4 nil 2 1)
         ("\\(\\([^ \n\t:\[]+\\):\\([0-9]+\\)\\):*\\s *[wW]arning: " 2 3 nil 1 1)
         ("\\(config.gem: .*\\)" nil nil nil 1 nil)
         ))
@@ -125,3 +126,25 @@ buffer."
           ("Gemfile$" . ruby-mode)
           ("\\.builder" . ruby-mode)
           ("\\.rjs" . ruby-mode)))
+
+(require 'project-local-variables)
+(defun project-grep(regexp &optional files dir confirm)
+  "Recursively grep for REGEXP in FILES in directory tree rooted at DIR. By default, DIR is the project's root directory."
+  (interactive
+   (progn
+     (grep-compute-defaults)
+     (cond
+      ((and grep-find-command (equal current-prefix-arg '(16)))
+       (list (read-from-minibuffer "Run: " grep-find-command
+				   nil nil 'grep-find-history)))
+      ((not grep-find-template)
+       (error "grep.el: No `grep-find-template' available"))
+      (t (let* ((regexp (grep-read-regexp))
+		(files (grep-read-files regexp))
+                (dir (file-name-directory (plv-find-project-file default-directory "")))
+;		(dir (read-directory-name "Base directory: " project-directory nil t))
+		(confirm (equal current-prefix-arg '(4))))
+	   (list regexp files dir confirm))))))
+  (rgrep regexp files dir confirm))
+
+

@@ -1,83 +1,56 @@
-;; (defun my-ruby-compile-hook ()
-;;   (add-to-list 'compilation-error-regexp-alist 
-;; 							 '("test[a-zA-Z0-9_]*([A-Z][a-zA-Z0-9_]*) \\[\\(.*\\):\\([0-9]+\\)\\]:" 1 2))
-;;   (add-to-list 'compilation-error-regexp-alist 
-;; 							 '("^ *\\[?\\([^:\\n\\r]+\\):\\([0-9]+\\):in" 1 2))
-;;   (setq compile-command "rake"))
-
-;;(add-hook 'ruby-mode-hook 'my-ruby-compile-hook)
-
-;; run the current test function
-
-(defun ruby-test-function ()
-  "Test the current ruby function (must be runable via ruby <buffer> --name <test>)."
-  (interactive)
-  (if (ruby-is-spec)
-      (ruby-run-spec (concat " --line " (number-to-string (line-number-at-pos))))
-    (if (ruby-is-cucumber)
-        (ruby-run-cucumber (concat ":" (number-to-string (line-number-at-pos))))
-    (let* ((funname (which-function))
-           (fn (or (and (string-match "#\\(.*\\)" funname) (match-string 1 funname)) funname)))
-      (ruby-run-test (concat " --name \"/" fn "/\""))))))
-
 (defun ruby-is-spec() (string-match "_spec.rb$" buffer-file-name))
 (defun ruby-is-test() (string-match "_test.rb$" buffer-file-name))
 (defun ruby-is-cucumber() (string-match ".feature$" buffer-file-name))
+
 (defun ruby-test-file ()
+  "Run the entire file with the appropriate test runner"
   (interactive)
-  (if (ruby-is-test)
-      (ruby-run-test)
-    (if (ruby-is-spec)
-        (ruby-run-spec)
-      (if (ruby-is-cucumber)
-          (ruby-run-cucumber)
-        (toggle-buffer)
-        (ruby-run-test)
-        (toggle-buffer)))))
+  (cond
+   (ruby-is-spec (ruby-run-spec))
+   (ruby-is-cucumber (ruby-run-cucumber))
+   (t (ruby-run-test))))
+
+(defun ruby-test-function()
+  "Try to determine the current context and just test that piece of this file"
+  (interactive)
+  (cond
+   (ruby-is-spec (ruby-run-spec (concat " --line " (number-to-string (line-number-at-pos)))))
+   (ruby-is-cucumber (ruby-run-cucumber (concat ":" (number-to-string (line-number-at-pos)))))
+   (t (let* ((funname (which-function))
+             (fn (or (and (string-match "#\\(.*\\)" funname) (match-string 1 funname)) funname)))
+        (ruby-run-test (concat " --name \"/" fn "/\"")))
 
 (defun ruby-run-spec(&optional args)
   "The actual compile command to run an individual rspec (either file or function)"
   (let ((ruby-compile-command 
-         (concat "rm log/test.log; bundle exec rspec  --no-color -Ispec " (buffer-file-name) args))
-        (current-buffer (current-buffer)))
-    (compile (ruby-rvm-compile ruby-compile-command))
-    ))
+         (concat "rm -f log/test.log; bundle exec rspec  --no-color -Ispec " (buffer-file-name) args)))
+    (compile (ruby-rvm-compile ruby-compile-command))))
 
 (defun ruby-run-cucumber(&optional args)
   "The actual compile command to run an individual cucumber (either file or function)"
   (let ((ruby-compile-command 
-         (concat "rm log/cucumber.log; bundle exec cucumber  --no-color " (buffer-file-name) args))
-        (current-buffer (current-buffer)))
-    (compile (ruby-rvm-compile ruby-compile-command))
-    ))
+         (concat "rm -f log/cucumber.log; bundle exec cucumber  --no-color " (buffer-file-name) args)))
+    (compile (ruby-rvm-compile ruby-compile-command))))
 
 (defun ruby-run-test(&optional args)
   "The actual compile command to run an individual rails test (either file or function)"
-  (let ((ruby-compile-command (concat "rm log/test.log; ruby -Itest " (buffer-file-name) args))
-        (current-buffer (current-buffer)))
-    (save-excursion
-      (save-some-buffers (not compilation-ask-about-save) nil)
-      (dired (rails-root))
-      (compile (ruby-rvm-compile ruby-compile-command))
-      (goto-char (point-max))
-      (dired (rails-root))
-      (bury-buffer))))
+  (let ((ruby-compile-command (concat "rm -f log/test.log; ruby -Itest " (buffer-file-name) args)))
+    (compile (ruby-rvm-compile ruby-compile-command))))
 
 (defun ruby-rvm-compile(command)
-  (concat "cd " (rails-root) ";"
-          (if (file-exists-p (concat (rails-root) ".rvmrc"))
-              (concat " source .rvmrc;"))
-          command))
-
-(defun autotest ()
-  (interactive)
-  (let ((buffer (shell (concat "cd " (rails-root) ";autotest -rails"))))
-    (compilation-shell-minor-mode)
-    (define-key shell-mode-map "\C-c\C-a" 'autotest-switch)
-    (comint-send-string buffer "autotest\n")))
+  (let ((log-file (if (ruby-is-cucumber) "cucumber.log" "test.log"))
+        (runner (cond
+                 ((ruby-is-spec) "rspec --no-color -Ispec ")
+                 ((ruby-is-cucumber) "cucumber --no-color ")
+                 (t "ruby -Itest")))
+        (bundle (if (file-exists-p (concat (rails-root) "Gemfile")) "bundle exec"))
+        (rvm (if (file-exists-p (concat (rails-root) ".rvmrc")) "source .rvmrc; ")))
+  (concat "cd " (rails-root) ";" rvm "rm -f log/" log-file ";" rvm bundle runner command)))
 
 (provide 'ruby-test)
 
+;;; All this below here is to dynamically rename the *complation* buffer with each run
+;;; I found this a little annoying and so have turned it off
 (defun comp-mult-name (mjr-mode)
   "Suitable for assignment to compilation-buffer-name-function"
   (concat "*" (downcase mjr-mode)
@@ -90,4 +63,4 @@
 (setq
  ;; Usually compile the same way so don't ask unless I give prefix arg
  compilation-read-command nil
- compilation-buffer-name-function	'comp-mult-name)
+ compilation-buffer-name-function	nil)
