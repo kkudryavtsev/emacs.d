@@ -32,6 +32,7 @@
 (require 'linum)
 (require 'yasnippet)
 (require 'find-file-in-tags)
+(require 'project-grep)
 
 (require 'ido)(ido-mode t)
 (setq ido-enable-flex-matching t)
@@ -142,7 +143,7 @@
 (setq cvs-update-optional-flags nil)
 
 (autoload 'ruby-mode "ruby-mode" nil t)
-(autoload 'find-file-in-project "arorem" nil t)
+(autoload 'find-file-in-project "find-file-in-project" nil t)
 (autoload 'camelCase-mode "camelCase-mode" nil t)
 (autoload 'w3m "w3m" "Interface for w3m on Emacs." t)
 (autoload 'dict-lookup-words "dict" "client interface for dict.org" t)
@@ -224,13 +225,57 @@
  '(mouse-yank-at-point t)
  '(mwheel-follow-mouse t)
  '(mwheel-scroll-amount (quote (nil . 5)))
- '(nxhtml-default-validation-header "body-utf-8")
+ '(nxhtml-default-validation-header "html5")
+ '(nxhtml-guess-validation-header-alist (quote (("^[[:blank:]]*<body" . "html5") ("^[[:blank:]]*</head>" . "head-closed-utf-8") ("^[[:blank:]]*<head" . "head-utf-8") ("^[[:blank:]]*<html" . "html-utf-8"))))
  '(nxhtml-validation-header-if-mumamo t)
+ '(nxhtml-validation-headers (quote (("body-iso-8859-1" . "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
+\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+    <title>Fictive XHTML Validation Header</title>
+  </head>
+  <body>
+") ("head-iso-8859-1" . "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
+\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+") ("html-iso-8859-1" . "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
+\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+") ("body-utf-8" . "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
+\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+    <title>Fictive XHTML Validation Header</title>
+  </head>
+  <body>
+") ("head-utf-8" . "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
+\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+") ("head-closed-utf-8" . "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
+\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+    <title></title>
+  </head>
+") ("html-utf-8" . "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
+\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+") ("html5" . "<!DOCTYPE html><head lang=\"en\"></head><body>"))))
  '(nxml-sexp-element-flag t)
  '(nxml-slash-auto-complete-flag t)
  '(paren-backwards-message t)
  '(paren-mode (quote sexp) nil (paren))
  '(php-file-patterns (quote ("\\.php[s34]?\\'" "\\.phtml\\'" "\\.inc\\'" "\\.module\\'")))
+ '(pivotal-api-token "40200b78249ea2e7507adfea3d86d325")
  '(query-user-mail-address nil)
  '(resize-minibuffer-window-exactly nil)
  '(resize-minibuffer-window-max-height -1)
