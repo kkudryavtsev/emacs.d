@@ -19,7 +19,7 @@
 ;(require 'snippet)
 
 ;(require 'rinari-abbrevs)
-(require 'ruby-test)
+;(require 'ruby-test)
 
 ;;; helpers for rinari-find-view
 (defun rinari-name-components (name)

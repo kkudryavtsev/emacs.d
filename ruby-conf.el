@@ -6,24 +6,6 @@
 ;(add-to-list 'compilation-error-regexp-alist 
 ;             '("test[a-zA-Z0-9_]*([A-Z][a-zA-Z0-9_]*) \\[\\(.*\\):\\([0-9]+\\)\\]:" 1 2))
 ;; after much consternation, something is getting a bad regexp into this list that breaks matching on ruby tests.  
-(setq compilation-error-regexp-alist
-      '(("\\(\\([^ \n\t:\[]+[a-zA-Z]\\):\\([0-9]+\\)\\)" 2 3 nil 2 1)
-;        ("\\[\\(\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 2 3 nil 2 1)
-        ("\\(\\[/\\)?\\(\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 3 4 nil 2 1)
-        ("\\(\\([^ \n\t:\[]+\\):\\([0-9]+\\)\\):*\\s *[wW]arning: " 2 3 nil 1 1)
-        ("\\(config.gem: .*\\)" nil nil nil 1 nil)
-        ))
-(setq compilation-mode-font-lock-keywords
-      '(("ruby -I\\(.*\\(test/[^)]+\\)\\)+" (2 font-lock-function-name-face))
-        ("rspec -I\\(.*\\(spec/[^)]+\\)\\)+" (2 font-lock-function-name-face))
-        ("\\(rake .*\\)" (1 font-lock-function-name-face))
-        ("\\(<i>.*</i>\\)" (1 font-lock-comment-face))
-        ("^\\(test[^\(]+\\)" (1 font-lock-function-name-face))
-        ("^\\(test[^\(]+\\)(\\([^\)]+\\))" (2 font-lock-constant-face))
-        ("Started\n[.EF]*\\([EF]\\)[.EF]*\nFinished" (1 compilation-error-face))
-        ("\\([1-9][0-9]* \\(failure\\|errors\\)\\)" (1 compilation-error-face))
-        ("^[ \t]*\\(.*examples, 0 failures\\)" (1 compilation-info-face))
-        ("^[ \t]*\\(.*, 0 failures, 0 errors\\)" (1 compilation-info-face))))
 
 (defun toggle-ruby-compilation-mode ()
      "Toggle between inferior-ruby-mode and compilation-mode"
@@ -34,6 +16,7 @@
       ((string-equal major-mode "inferior-ruby-mode") (compilation-mode))))
 
 (require 'rinari)
+(require 'ruby-test)
 ;(load-file (concat my-config-dir "dka-ruby-snippets.el"))
 
 (require 'rails-shoulda)

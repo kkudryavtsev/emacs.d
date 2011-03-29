@@ -1,5 +1,50 @@
+;;; ruby-test.el --- Run individual ruby tests/specs in various ways
+
+;; Copyright (C) 2011 Doug Alcorn
+
+;; Author: Doug Alcorn
+;; URL: 
+;; Version: 0.1
+;; Created: 2011-03-29
+;; Keywords: project, ruby, test, compile
+
+;; This file is NOT part of GNU Emacs.
+
+;;; License:
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;;; Commentary:
+
+;; This file allows you to run your project's tests in various
+;; ways. It detects rspec, test-unit, and cucumber based on
+;; filename. Runs the tests with compilation mode. This gives you the
+;; benefit of re-compile and using compilation mode for syntax
+;; highlighting and clickability.
+
+;; There are other ways to do all this, but I'm trying to keep it as
+;; simple as possible here for ease in maintenance.
+
+;;; Todo:
+
+;; - merge in support for rake? (or not)
+
 (require 'which-func)
 (require 'project-local-variables)
+(require 'compile)
 
 (defun ruby-is-spec() (string-match "_spec.rb$" buffer-file-name))
 (defun ruby-is-test() (string-match "_test.rb$" buffer-file-name))
@@ -42,16 +87,49 @@
     (compile (ruby-rvm-compile ruby-compile-command))))
 
 (defun ruby-rvm-compile(command)
-  (let ((log-file (if (ruby-is-cucumber) "cucumber.log" "test.log"))
-        (runner (cond
-                 ((ruby-is-spec) "rspec --no-color -Ispec ")
-                 ((ruby-is-cucumber) "cucumber --no-color ")
-                 (t "ruby -Itest ")))
-        (bundle (if (file-exists-p (concat (rails-root) "Gemfile")) "bundle exec "))
-        (rvm (if (file-exists-p (concat (rails-root) ".rvmrc")) "source .rvmrc; ")))
-  (concat "cd " (rails-root) "; " rvm "rm -f log/" log-file "; " rvm bundle runner command)))
+  (let* ((log-file (if (ruby-is-cucumber) "cucumber.log" "test.log"))
+         (rm-log (if (file-exists-p (concat (ruby-test-project-root) "log/" log-file))
+                     (concat "rm -f log/" log-file "; ")))
+         (runner (cond
+                  ((ruby-is-spec) "rspec --no-color -Ispec ")
+                  ((ruby-is-cucumber) "cucumber --no-color ")
+                  (t "ruby -Itest ")))
+         (bundle (if (file-exists-p (concat (ruby-test-project-root) "Gemfile")) "bundle exec "))
+         (rvm (if (file-exists-p (concat (ruby-test-project-root) ".rvmrc")) "source .rvmrc; ")))
+  (concat "cd " (ruby-test-project-root) "; " rm-log rvm bundle runner command)))
+
+(defun ruby-test-project-root()
+  (file-name-directory (plv-find-project-file default-directory "")))
 
 (provide 'ruby-test)
+
+;;; This is probably bad form, but I've had problems with other
+;;; libraries putting junk in the comopilation-* alists. Rather and
+;;; add-to-list or try to smart manage it, I'm just blowing away what
+;;; was there and setting it "correctly" for ruby. Unfortunately, this
+;;; needs to be tweaked from time to fime as the various testing
+;;; frameworks change the format of their back traces.
+
+(setq compilation-error-regexp-alist
+      '(("\\(\\([^ \n\t:\[]+[a-zA-Z]\\):\\([0-9]+\\)\\)" 2 3 nil 2 1)
+;        ("\\[\\(\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 2 3 nil 2 1)
+        ("\\(\\[/\\)?\\(\\([^:]+[a-zA-Z]\\):\\([0-9]+\\)\\)\\]:" 3 4 nil 2 1)
+        ("\\(\\([^ \n\t:\[]+\\):\\([0-9]+\\)\\):*\\s *[wW]arning: " 2 3 nil 1 1)
+        ("\\(config.gem: .*\\)" nil nil nil 1 nil)
+        ))
+(setq compilation-mode-font-lock-keywords
+      '(("ruby -I\\(.*\\(test/[^)]+\\)\\)+" (2 font-lock-function-name-face))
+        ("rspec -I\\(.*\\(spec/[^)]+\\)\\)+" (2 font-lock-function-name-face))
+        ("\\(rake .*\\)" (1 font-lock-function-name-face))
+        ("\\(<i>.*</i>\\)" (1 font-lock-comment-face))
+        ("^\\(test[^\(]+\\)" (1 font-lock-function-name-face))
+        ("^\\(test[^\(]+\\)(\\([^\)]+\\))" (2 font-lock-constant-face))
+        ("Started\n[.EF]*\\([EF]\\)[.EF]*\nFinished" (1 compilation-error-face))
+        ("\\([1-9][0-9]* \\(failure\\|errors\\)\\)" (1 compilation-error-face))
+        ("^[ \t]*\\(.*examples, 0 failures\\)" (1 compilation-info-face))
+        ("^[ \t]*\\(.*, 0 failures, 0 errors\\)" (1 compilation-info-face))))
+
+;;; ruby-test.el ends here
 
 ;;; All this below here is to dynamically rename the *complation* buffer with each run
 ;;; I found this a little annoying and so have turned it off
