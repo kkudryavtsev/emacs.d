@@ -1,40 +1,44 @@
+(require 'which-func)
+(require 'project-local-variables)
+
 (defun ruby-is-spec() (string-match "_spec.rb$" buffer-file-name))
 (defun ruby-is-test() (string-match "_test.rb$" buffer-file-name))
 (defun ruby-is-cucumber() (string-match ".feature$" buffer-file-name))
 
-(defun ruby-test-file ()
+(defun ruby-test-file (&optional args)
   "Run the entire file with the appropriate test runner"
   (interactive)
-  (cond
-   (ruby-is-spec (ruby-run-spec))
-   (ruby-is-cucumber (ruby-run-cucumber))
-   (t (ruby-run-test))))
+  (compile (ruby-rvm-compile (concat (buffer-file-name) args))))
 
-(defun ruby-test-function()
+(defun ruby-test-function(&optional args)
   "Try to determine the current context and just test that piece of this file"
   (interactive)
-  (cond
-   (ruby-is-spec (ruby-run-spec (concat " --line " (number-to-string (line-number-at-pos)))))
-   (ruby-is-cucumber (ruby-run-cucumber (concat ":" (number-to-string (line-number-at-pos)))))
-   (t (let* ((funname (which-function))
-             (fn (or (and (string-match "#\\(.*\\)" funname) (match-string 1 funname)) funname)))
-        (ruby-run-test (concat " --name \"/" fn "/\"")))
+  (let* ((function-name (which-function))
+         (func-spec
+         (cond
+          ((ruby-is-spec) (concat " --line " (number-to-string (line-number-at-pos))))
+          ((ruby-is-cucumber) (concat ":" (number-to-string (line-number-at-pos))))
+          (t (concat " --name \"/"
+                     (or
+                      ;; look for Class#method and just return the function name part
+                      (and (string-match "#\\(.*\\)" function-name) (match-string 1 function-name))
+                      ;; rely on which-function/imenu to find the test function name
+                      function-name) "/\"")))))
+    (compile (ruby-rvm-compile (concat (buffer-file-name) func-spec)))))
 
 (defun ruby-run-spec(&optional args)
   "The actual compile command to run an individual rspec (either file or function)"
-  (let ((ruby-compile-command 
-         (concat "rm -f log/test.log; bundle exec rspec  --no-color -Ispec " (buffer-file-name) args)))
+  (let ((ruby-compile-command (concat (buffer-file-name) args)))
     (compile (ruby-rvm-compile ruby-compile-command))))
 
 (defun ruby-run-cucumber(&optional args)
   "The actual compile command to run an individual cucumber (either file or function)"
-  (let ((ruby-compile-command 
-         (concat "rm -f log/cucumber.log; bundle exec cucumber  --no-color " (buffer-file-name) args)))
+  (let ((ruby-compile-command (concat (buffer-file-name) args)))
     (compile (ruby-rvm-compile ruby-compile-command))))
 
 (defun ruby-run-test(&optional args)
   "The actual compile command to run an individual rails test (either file or function)"
-  (let ((ruby-compile-command (concat "rm -f log/test.log; ruby -Itest " (buffer-file-name) args)))
+  (let ((ruby-compile-command (concat (buffer-file-name) args)))
     (compile (ruby-rvm-compile ruby-compile-command))))
 
 (defun ruby-rvm-compile(command)
@@ -42,10 +46,10 @@
         (runner (cond
                  ((ruby-is-spec) "rspec --no-color -Ispec ")
                  ((ruby-is-cucumber) "cucumber --no-color ")
-                 (t "ruby -Itest")))
-        (bundle (if (file-exists-p (concat (rails-root) "Gemfile")) "bundle exec"))
+                 (t "ruby -Itest ")))
+        (bundle (if (file-exists-p (concat (rails-root) "Gemfile")) "bundle exec "))
         (rvm (if (file-exists-p (concat (rails-root) ".rvmrc")) "source .rvmrc; ")))
-  (concat "cd " (rails-root) ";" rvm "rm -f log/" log-file ";" rvm bundle runner command)))
+  (concat "cd " (rails-root) "; " rvm "rm -f log/" log-file "; " rvm bundle runner command)))
 
 (provide 'ruby-test)
 
