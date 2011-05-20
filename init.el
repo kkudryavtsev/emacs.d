@@ -65,7 +65,6 @@
 (load-file (concat my-config-dir "nxml-config.el"))
 (load-file (concat my-config-dir "nxhtml-config.el"))
 (load-file (concat my-config-dir "yas-config.el"))
-(load-file (concat my-config-dir "ecb-config.el"))
 (load-file (concat my-config-dir "hideshowvis-config.el"))
 
 
@@ -135,6 +134,11 @@
 (setq browse-url-browser-function 'browse-url-default-macosx-browser)
 (setq imenu-auto-rescan t)
 
+(require 'textmate)
+(require 'peepopen)
+(setq ns-pop-up-frames nil)
+(textmate-mode)
+
 (setq tramp-default-method "scp"
       tramp-terminal-type "vt100"
       ange-ftp-ftp-program-args '("-i" "-n" "-g" "-v" "-e"))
@@ -182,25 +186,23 @@
  '(debug-on-error nil)
  '(default-frame-plist (quote (height 55 width 150)))
  '(delete-key-deletes-forward t)
- '(desktop-save-mode t)
  '(display-time-day-and-date t)
  '(ecb-compilation-buffer-names (quote (("*Calculator*") ("*vc*") ("*vc-diff*") ("*Apropos*") ("*Occur*") ("*shell*") ("\\*[cC]ompilation.*\\*" . t) ("\\*i?grep.*\\*" . t) ("*JDEE Compile Server*") ("*Help*") ("*Completions*") ("*Compile-log*") ("*bsh*") ("*Messages*") ("*magit-edit-log*") ("*Backtrace*") ("\\.log" . t))))
- '(ecb-compile-window-height 0.3)
+ '(ecb-compile-window-height 6)
  '(ecb-compile-window-prevent-shrink-below-height nil)
  '(ecb-history-make-buckets (quote never))
  '(ecb-history-sort-method nil)
  '(ecb-layout-name "left14")
- '(ecb-layout-window-sizes (quote (("left8" (0.17857142857142858 . 0.27941176470588236) (0.17857142857142858 . 0.23529411764705882) (0.17857142857142858 . 0.29411764705882354) (0.17857142857142858 . 0.17647058823529413)) ("left15" (0.1865079365079365 . 0.5) (0.1865079365079365 . 0.4852941176470588)) ("left14" (0.21428571428571427 . 0.7352941176470589) (0.21428571428571427 . 0.25)))))
+ '(ecb-layout-window-sizes (quote (("left8" (0.17857142857142858 . 0.27941176470588236) (0.17857142857142858 . 0.23529411764705882) (0.17857142857142858 . 0.29411764705882354) (0.17857142857142858 . 0.17647058823529413)) ("left15" (0.1865079365079365 . 0.5) (0.1865079365079365 . 0.4852941176470588)) ("left14" (0.15139442231075698 . 0.6029411764705882) (0.15139442231075698 . 0.38235294117647056)))))
  '(ecb-options-version "2.40")
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--mouse-2))
  '(ecb-source-path (quote (("/Users/dalcorn/devel/" "devel") ("/Users/dalcorn/.rvm/" "rvm"))))
  '(ecb-toggle-layout-sequence (quote ("left8" "left14" "left15")))
- '(ecb-windows-width 0.1)
  '(elscreen-display-tab nil)
  '(font-lock-mode t t (font-lock))
  '(get-frame-for-buffer-default-instance-limit nil)
  '(global-auto-revert-mode t)
- '(grep-files-aliases (quote (("all" . "* .*") ("el" . "*.el") ("ch" . "*.[ch]") ("c" . "*.c") ("cc" . "*.cc *.cxx *.cpp *.C *.CC *.c++") ("cchh" . "*.cc *.[ch]xx *.[ch]pp *.[CHh] *.CC *.HH *.[ch]++") ("hh" . "*.hxx *.hpp *.[Hh] *.HH *.h++") ("h" . "*.h") ("l" . "[Cc]hange[Ll]og*") ("m" . "[Mm]akefile*") ("tex" . "*.tex") ("texi" . "*.texi") ("asm" . "*.[sS]") ("rails" . "*.rb *.erb *.haml *.yml *.rake") ("coffee" . "*.coffee *.js") ("xml" . "*.xml *.xsd") ("iomog" . "*.rb *.erb *.yml *.xml *.coffee *.xsd") ("rb" . "*.rb *.erb *.haml *.rake"))))
+ '(grep-files-aliases (quote (("all" . "* .*") ("el" . "*.el") ("ch" . "*.[ch]") ("c" . "*.c") ("cc" . "*.cc *.cxx *.cpp *.C *.CC *.c++") ("cchh" . "*.cc *.[ch]xx *.[ch]pp *.[CHh] *.CC *.HH *.[ch]++") ("hh" . "*.hxx *.hpp *.[Hh] *.HH *.h++") ("h" . "*.h") ("l" . "[Cc]hange[Ll]og*") ("m" . "[Mm]akefile*") ("tex" . "*.tex") ("texi" . "*.texi") ("asm" . "*.[sS]") ("rails" . "*.rb *.erb *.haml *.yml *.rake") ("coffee" . "*.coffee *.js") ("xml" . "*.xml *.xsd") ("iomog" . "*.rb *.erb *.yml *.xml *.coffee *.xsd") ("rb" . "*.rb *.erb *.haml *.rake") ("html" . "*.html *.css *.js *.erb"))))
  '(grep-find-ignored-directories (quote ("CVS" ".svn" ".git" "tmp")))
  '(grep-find-ignored-files (quote (".#*" "*~" "*.elc" "*.idx" "*.orig")))
  '(gutter-buffers-tab-enabled nil)
@@ -274,8 +276,6 @@
  '(nxml-slash-auto-complete-flag t)
  '(paren-backwards-message t)
  '(paren-mode (quote sexp) nil (paren))
- '(php-file-patterns (quote ("\\.php[s34]?\\'" "\\.phtml\\'" "\\.inc\\'" "\\.module\\'")))
- '(pivotal-api-token "40200b78249ea2e7507adfea3d86d325")
  '(query-user-mail-address nil)
  '(resize-minibuffer-window-exactly nil)
  '(resize-minibuffer-window-max-height -1)
@@ -346,8 +346,12 @@
 (load-file (concat my-config-dir "color-theme-dka.el"))
 (if window-system
     (color-theme-dka)
-(load-file (concat my-config-dir "tty-config.el")))
 
+(load-file (concat my-config-dir "tty-config.el")))
+(load-file (concat my-config-dir "ecb-config.el"))
+(maximize-frame)
 (server-start)
 (if window-system-version
     (maximize-frame))
+
+;(desktop-save-mode 1)

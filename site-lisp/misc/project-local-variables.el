@@ -55,16 +55,16 @@
          ((file-exists-p f) f)
          (t (plv-find-project-file parent mode-name)))))
 
-(defadvice hack-local-variables (before project-local-variables activate)
-  (let* ((full-name (symbol-name major-mode))
-         (mode-name (if (string-match "\\(.*\\)-mode$" full-name)
-                        (match-string 1 full-name)
-                      full-name))
-         (pfile (plv-find-project-file default-directory (concat "-" mode-name)))
-         (gfile (plv-find-project-file default-directory "")))
-    (save-excursion
-      (when gfile (load gfile))
-      (when pfile (load pfile)))))
+;; (defadvice hack-local-variables (before project-local-variables activate)
+;;   (let* ((full-name (symbol-name major-mode))
+;;          (mode-name (if (string-match "\\(.*\\)-mode$" full-name)
+;;                         (match-string 1 full-name)
+;;                       full-name))
+;;          (pfile (plv-find-project-file default-directory (concat "-" mode-name)))
+;;          (gfile (plv-find-project-file default-directory "")))
+;;     (save-excursion
+;;       (when gfile (load gfile))
+;;       (when pfile (load pfile)))))
 
 (add-to-list 'auto-mode-alist '("^\.emacs-project" . emacs-lisp-mode))
 

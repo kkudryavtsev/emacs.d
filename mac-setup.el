@@ -11,7 +11,8 @@
 (define-key mac-key-mode-map (kbd "A-w") 'delete-frame)
 (define-key mac-key-mode-map (kbd "A-p") 'pdf-preview-buffer)
 (define-key mac-key-mode-map (kbd "M-A-p") 'pdf-preview-buffer-with-faces)
-(define-key mac-key-mode-map (kbd "A-t") 'find-file-in-project)
+(define-key mac-key-mode-map (kbd "A-t") 'peepopen-goto-file-gui)
+;(define-key mac-key-mode-map (kbd "A-t") 'textmate-goto-file)
 (define-key mac-key-mode-map (kbd "A-l") 'goto-line)
 (define-key mac-key-mode-map (kbd "A-F") 'project-grep)
 
