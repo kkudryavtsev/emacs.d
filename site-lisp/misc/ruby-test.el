@@ -44,8 +44,10 @@
 
 (require 'which-func)
 (require 'project-local-variables)
+(require 'dirvars)
 (require 'compile)
 
+(defvar rspec-version 2 "Version of rspec to use as the spec runner. Version 1 requires the spec runner to be simply `spec'. Version 2 uses `rspec'.")
 (defun ruby-is-spec() (string-match "_spec.rb$" buffer-file-name))
 (defun ruby-is-test() (string-match "_test.rb$" buffer-file-name))
 (defun ruby-is-cucumber() (string-match ".feature$" buffer-file-name))
@@ -91,6 +93,7 @@
          (rm-log (if (file-exists-p (concat (ruby-test-project-root) "log/" log-file))
                      (concat "rm -f log/" log-file "; ")))
          (runner (cond
+                  ((and (eq rspec-version 1) (ruby-is-spec)) "spec ")
                   ((ruby-is-spec) "rspec --no-color -Ispec ")
                   ((ruby-is-cucumber) "cucumber --no-color ")
                   (t "ruby -Itest ")))
@@ -146,3 +149,10 @@
  ;; Usually compile the same way so don't ask unless I give prefix arg
  compilation-read-command nil
  compilation-buffer-name-function	nil)
+
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
